@@ -20,17 +20,22 @@
                     Pilih Gambar: <br>
                     <input type="file" accept="image/*">
                 </label>
+                <br>
+                <label id="dataset">
+                    Pilih Dataset: <br>
+                    <input type="file" accept="image/*">
+                </label>
 
                 <section id="toggleButton">
-                    <input type="radio" name="metode" value="yes" checked="checked">
+                    <input type="radio" name="metode" id="Color" value="yes" checked="checked">
                     <label for="Color">Color</label>
 
-                    <input type="radio" name="metode" value="no">
+                    <input type="radio" name="metode" id="Texture" value="no">
                     <label for="Texture">Texture</label>
                 </section>
             </div>
-            <div id="submitButton">
-                <button type="submit" id="start">Search</button>
+            <div id="start">
+                <button type="submit">Search</button>
             </div>
         </main>
         <footer>

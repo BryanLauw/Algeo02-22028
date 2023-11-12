@@ -1,6 +1,9 @@
 import numpy as np
 import math as m
 import cv2
+import os
+import time
+from zipfile import ZipFile
 
 def nContrast(mCO) :
     contrast = 0
@@ -40,6 +43,30 @@ def matriksCoOccurance(mGrayImage) :
     matriksCO = matriksCO/sigma
     return matriksCO
 
+def nDissimilarity(mCo) :
+    dissimilarity = 0 
+    for i in range(0,256) :
+        for j in range(0,256) :
+            if i >= j :
+                dissimilarity = dissimilarity + mCo[i][j]*(i-j) 
+            else :
+                dissimilarity = dissimilarity + mCo[i][j]*(j-i)
+    #print(dissimilarity)
+    return dissimilarity
+
+def nASM(mCo) :
+    ASM = 0 
+    for i in range(0,256) :
+        for j in range(0,256) :
+            ASM = ASM + m.pow(mCo[i][j],2)
+    #print(ASM)
+    return ASM
+
+def nEnergy(mCo) :
+    energy = m.sqrt(nASM(mCo))
+    #print(energy)
+    return energy
+
 def RGBtoGrayscale(gambar) :
     mGray = np.array([[0 for j in range(len(gambar[0]))] for i in range(len(gambar))])
     for i in range(len(gambar)) :
@@ -60,28 +87,58 @@ def cosSimilarity(vektorA, vektorB) :
     jarakA = dotProduct/m.sqrt(jarakA)
     return jarakA
 
-def bandingTekstur(image1, image2) :
-    mCO1 = matriksCoOccurance(image1)
-    print(mCO1)
-    mCO2 = matriksCoOccurance(image2)
-    print(mCO2)
+def texture(queryImg, zipFolder):
+    with ZipFile(zipFolder, 'r') as f :
+        f.extractall('dataset')
+
+    folder = os.listdir('dataset')
+    array_vektor = []
+    for file in folder :
+        #start = time.time()
+        image = cv2.imread(file)
+        image = RGBtoGrayscale(image)
+        image = matriksCoOccurance(image)
+        vektor = [nContrast(image), nHomogeneity(image), nEntropy(image), nDissimilarity(image), nASM(image), nEnergy(image)]
+        array_vektor.append(vektor)
+        #end = time.time()
+        #print(f"Iteration: {file}\tTime taken: {(end-start)*10**3:.03f}ms")
+    #print(array_vektor)
+
+    array_cos =[]
+    #start = time.time()       
+    image = cv2.imread(queryImg)
+    image = RGBtoGrayscale(image)
+    image = matriksCoOccurance(image)
+    vektorq = [nContrast(image), nHomogeneity(image), nEntropy(image), nDissimilarity(image), nASM(image), nEnergy(image)]
+    for i in array_vektor :
+        x = cosSimilarity(vektorq,i)
+        array_cos.append(x)
+    #print(array_cos)
+    #end = time.time()
+    #print(f"Iteration: {file}\tTime taken: {(end-start)*10**3:.03f}ms")
+    return array_cos
+
+def bandingTekstur(mCO1, mCO2) :
     vektorA = [nContrast(mCO1), nHomogeneity(mCO1), nEntropy(mCO1)]
     vektorB = [nContrast(mCO2), nHomogeneity(mCO2), nEntropy(mCO2)]
     nCossine = cosSimilarity(vektorA,vektorB)
     return nCossine
 
-"""
-image1 = cv2.imread("kucing2.jpg")
-image2 = cv2.imread("siklus.jpg")
-#image1 = RGBtoGrayscale(image1) 601,2/907,8*401 18178,7
-#image2 = RGBtoGrayscale(image2)
-print(image1)
-print(image2)
-image1 = cv2.cvtColor(np.array(image1), cv2.COLOR_BGR2GRAY)
-image2 = cv2.cvtColor(np.array(image2), cv2.COLOR_BGR2GRAY)
-print(image1)
-print(image2)
-hasil = bandingTekstur(image1,image2)
-print(hasil)
-"""
+# image1 = cv2.imread("src/kucing2.jpg")
+# image2 = cv2.imread("src/siklus.jpg")
+# #image1 = RGBtoGrayscale(image1) 601,2/907,8*401 18178,7
+# #image2 = RGBtoGrayscale(image2)
+# print(image1)
+# print(image2)
+# image1 = cv2.cvtColor(np.array(image1), cv2.COLOR_BGR2GRAY)
+# image2 = cv2.cvtColor(np.array(image2), cv2.COLOR_BGR2GRAY)
+# mCO1 = matriksCoOccurance(image1)
+# print(mCO1)
+# mCO2 = matriksCoOccurance(image2)
+# print(mCO2)
+# print(image1)
+# print(image2)
+# hasil = bandingTekstur(mCO1,mCO2)
+# print(hasil)
+
 

@@ -60,15 +60,6 @@ def cosSimilarity(vektorA, vektorB) :
     jarakA = dotProduct/m.sqrt(jarakA)
     return jarakA
 
-def bandingTekstur(image1, image2) :
-    mCO1 = matriksCoOccurance(image1)
-    print(mCO1)
-    mCO2 = matriksCoOccurance(image2)
-    print(mCO2)
-    vektorA = [nContrast(mCO1), nHomogeneity(mCO1), nEntropy(mCO1)]
-    vektorB = [nContrast(mCO2), nHomogeneity(mCO2), nEntropy(mCO2)]
-    nCossine = cosSimilarity(vektorA,vektorB)
-    return nCossine
 
 """
 image1 = cv2.imread("kucing2.jpg")

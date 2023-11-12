@@ -91,7 +91,9 @@ def texture(queryImg, folder):
     array_vektor = []
     for file in folder :
         #start = time.time()
+        #print(file)
         image = cv2.imread(file)
+        #print(image)
         image = RGBtoGrayscale(image)
         image = matriksCoOccurance(image)
         vektor = [nContrast(image), nHomogeneity(image), nEntropy(image), nDissimilarity(image), nASM(image), nEnergy(image)]
@@ -135,4 +137,6 @@ def bandingTekstur(mCO1, mCO2) :
 # print(image1)
 # print(image2)
 # hasil = bandingTekstur(mCO1,mCO2)
-# print(hasil)
+# # print(hasil)
+# ar = os.listdir('dong')
+# arc = texture("hitam.jpg", ar)

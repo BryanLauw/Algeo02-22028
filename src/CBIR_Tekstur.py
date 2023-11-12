@@ -10,7 +10,7 @@ def nContrast(mCO) :
     for i in range(0,256):
         for j in range(0,256):
             contrast = contrast + mCO[i][j]*(m.pow((i-j),2))
-    print(contrast)
+    # print(contrast)
     return contrast
 
 def nHomogeneity(mCo) :
@@ -18,7 +18,7 @@ def nHomogeneity(mCo) :
     for i in range(0,256):
         for j in range(0,256):
             homogeneity = homogeneity + mCo[i][j]/(1 + (m.pow((i-j),2)))
-    print(homogeneity)
+    # print(homogeneity)
     return homogeneity
 
 def nEntropy(mCo) :
@@ -27,7 +27,7 @@ def nEntropy(mCo) :
         for j in range(0,256):
             if mCo[i][j] != 0 :
                 entropy = entropy - mCo[i][j]*(m.log10(mCo[i][j]))
-    print(entropy)
+    # print(entropy)
     return entropy
 
 def matriksCoOccurance(mGrayImage) :    
@@ -89,9 +89,9 @@ def cosSimilarity(vektorA, vektorB) :
 
 def texture(queryImg, zipFolder):
     with ZipFile(zipFolder, 'r') as f :
-        f.extractall('dataset')
+        f.extractall('static/upload/dir')
 
-    folder = os.listdir('dataset')
+    folder = os.listdir('static/upload/dir')
     array_vektor = []
     for file in folder :
         #start = time.time()
@@ -141,4 +141,4 @@ def bandingTekstur(mCO1, mCO2) :
 # hasil = bandingTekstur(mCO1,mCO2)
 # print(hasil)
 
-
+ar_cos = texture('static/upload/basis.png','static/upload/dataset.zip')

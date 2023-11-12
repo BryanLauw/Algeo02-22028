@@ -20,7 +20,7 @@
                 <input type="file" accept="image/*" name="gambar" required>
                 <br>
                 <label for="dataset">Pilih Dataset:<br></label>
-                <input type="file" accept="image/*" name="dataset" required>
+                <input type="file" accept=".zip, .rar, .7zip/*" name="dataset" required>
 
                 <section id="toggleButton">
                     <input type="radio" name="metode" id="Color" value="yes" checked="checked">
@@ -34,11 +34,13 @@
             </form>
             
             <div class="result">
-                {% if gambar and data and kemiripan %}
+                {% if gambar and ar_cos %}
                     <img src="{{gambar}}">
-                    <img src="{{data}}">
+                    
                     <br>
-                    <p>Tingkat kemiripan: {{kemiripan}}%</p>
+                    {% for el in ar_cos %}
+                        <p>Tingkat kemiripan: {{el}}%</p> <br>
+                    {% endfor %}
                 {% endif %}
             </div>
         </main>

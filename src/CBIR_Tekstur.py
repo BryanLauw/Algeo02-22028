@@ -87,11 +87,7 @@ def cosSimilarity(vektorA, vektorB) :
     jarakA = dotProduct/m.sqrt(jarakA)
     return jarakA
 
-def texture(queryImg, zipFolder):
-    with ZipFile(zipFolder, 'r') as f :
-        f.extractall('static/upload/dir')
-
-    folder = os.listdir('static/upload/dir')
+def texture(queryImg, folder):
     array_vektor = []
     for file in folder :
         #start = time.time()
@@ -140,5 +136,3 @@ def bandingTekstur(mCO1, mCO2) :
 # print(image2)
 # hasil = bandingTekstur(mCO1,mCO2)
 # print(hasil)
-
-ar_cos = texture('static/upload/basis.png','static/upload/dataset.zip')

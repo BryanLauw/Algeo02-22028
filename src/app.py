@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from module import *
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
-app.config['UPLOAD_PATH'] = 'src/static'
+app.config['UPLOAD_PATH'] = 'static/upload'
 
 @app.route('/', methods=['GET','POST'])
 def home():
@@ -16,10 +16,12 @@ def home():
 
         metode = request.form['metode']
         if metode == "no":
-            gambar = cv2.imread('static/basis.png')
-            data = cv2.imread('static/1.png')
-            kemiripan = bandingTekstur(gambar,data)
-        return render_template('home.html')
+            gambar = 'static/upload/basis.png'
+            g1 = cv2.imread(gambar)
+            data = 'static/upload/1.png'
+            d1 = cv2.imread(data)
+            kemiripan = round((bandingTekstur(g1,d1))*100,2)
+        return render_template('home.html',gambar=gambar, data=data, kemiripan=kemiripan)
     return render_template('home.html')
 
 if __name__ == '__main__':

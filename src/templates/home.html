@@ -34,9 +34,11 @@
             </form>
             
             <div class="result">
-                {% if img %}
-                    {% for %}
-                    {% endfor %}
+                {% if gambar and data and kemiripan %}
+                    <img src="{{gambar}}">
+                    <img src="{{data}}">
+                    <br>
+                    <p>Tingkat kemiripan: {{kemiripan}}%</p>
                 {% endif %}
             </div>
         </main>

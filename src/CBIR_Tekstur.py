@@ -85,7 +85,7 @@ def cosSimilarity(vektorA, vektorB) :
         jarakB = jarakB + m.pow(vektorB[i],2)
     jarakA = jarakA*jarakB  
     jarakA = dotProduct/m.sqrt(jarakA)
-    return jarakA
+    return round(jarakA*100,2)
 
 def texture(queryImg, folder):
     array_vektor = []
@@ -140,3 +140,30 @@ def bandingTekstur(mCO1, mCO2) :
 # # print(hasil)
 # ar = os.listdir('dong')
 # arc = texture("hitam.jpg", ar)
+# a = [(int(3),"a"),
+#     (int(5),"d"),
+#     (int(1),"c")]
+# a.sort(reverse=True)
+# print(a)
+# print(a[0][1])
+# print(a[1][1])
+# print(a[2][1])
+# print(round(a[0][0]/3*100,2))
+
+#contoh cara pakenya di bawah
+def urutGambar(ar_cos,ar_file) :
+    a = [(ar_cos[i],ar_file[i]) for i in range(len(ar_cos))]
+    print(a)
+    a.sort(reverse=True)
+    print(a)
+    gambarUrut = [a[i][1] for i in range(len(ar_cos))]
+    print(gambarUrut)
+    return gambarUrut
+
+# folder = os.listdir("dataset")
+# ar_file = []
+# for file in folder :
+#     ar_file.append(file)
+#     print(file)
+# ar_cos = texture("hitam.jpg",folder)
+# ar_gambarUrut = urutGambar(ar_cos,ar_file)

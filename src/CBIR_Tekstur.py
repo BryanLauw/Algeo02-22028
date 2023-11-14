@@ -91,10 +91,7 @@ def texture(queryImg, folder):
     array_vektor = []
     for file in folder :
         #start = time.time()
-        #print(file)
-        print(os.listdir(os.getcwd()))
         file = 'src/static/upload/dir/' + file
-        print(file)
         image = cv2.imread(file)
         #print(image)
         image = RGBtoGrayscale(image)
@@ -156,17 +153,15 @@ def bandingTekstur(mCO1, mCO2) :
 #contoh cara pakenya di bawah
 def urutGambar(ar_cos,ar_file) :
     a = [(ar_cos[i],ar_file[i]) for i in range(len(ar_cos))]
-    print(a)
+    # print(a)
     a.sort(reverse=True)
-    print(a)
-    gambarUrut = [a[i][1] for i in range(len(ar_cos))]
-    print(gambarUrut)
+    gambarUrut = list(filter(lambda x: x[0] >= 60, a))
+    # print(gambarUrut)
     return gambarUrut
 
-# folder = os.listdir("dataset")
+# folder = os.listdir("src/static/upload/dir")
 # ar_file = []
 # for file in folder :
 #     ar_file.append(file)
-#     print(file)
-# ar_cos = texture("hitam.jpg",folder)
+# ar_cos = texture("src/static/upload/basis.png",folder)
 # ar_gambarUrut = urutGambar(ar_cos,ar_file)

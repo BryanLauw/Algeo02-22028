@@ -21,6 +21,7 @@ def home():
             gambar = 'src/static/upload/basis.png'
             data = os.listdir('src/static/upload/dir')
             ar_cos = texture(gambar,data)
+            gambar = '../static/upload/basis.png'
         return render_template('home.html',gambar=gambar, ar_cos=ar_cos)
     return render_template('home.html')
 

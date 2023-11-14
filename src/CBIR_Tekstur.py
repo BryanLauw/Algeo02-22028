@@ -92,6 +92,9 @@ def texture(queryImg, folder):
     for file in folder :
         #start = time.time()
         #print(file)
+        print(os.listdir(os.getcwd()))
+        file = 'src/static/upload/dir/' + file
+        print(file)
         image = cv2.imread(file)
         #print(image)
         image = RGBtoGrayscale(image)
@@ -103,7 +106,7 @@ def texture(queryImg, folder):
     #print(array_vektor)
 
     array_cos =[]
-    #start = time.time()       
+    #start = time.time()   
     image = cv2.imread(queryImg)
     image = RGBtoGrayscale(image)
     image = matriksCoOccurance(image)

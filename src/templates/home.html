@@ -33,13 +33,23 @@
                 <input type="submit" value="Search">
             </form>
             
-            <div class="result">
-                {% if gambar and ar_cos %}
+            <div id="query">
+                <h3>Query Image</h3>
+                {% if gambar %}
                     <img src="{{gambar}}" alt="query image">
-                    
-                    <br>
-                    {% for el in ar_cos %}
-                        <p>Tingkat kemiripan: {{el}}%</p> <br>
+                {% endif %}
+            </div>
+            <hr>
+            {% if len %}
+                <p id="timeCount">{{len}} gambar dalam {{time}} detik</p>
+            {% endif %}
+            <div id="result">
+                <h3>Result</h3>
+                {% if ar %}
+                    {% for el in ar %}
+                        <img src="../static/upload/dir/{{el[1]}}">
+                        <figcaption>{{ el[0] }}%</figcaption>
+                        <br>
                     {% endfor %}
                 {% endif %}
             </div>

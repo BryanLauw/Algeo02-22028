@@ -16,13 +16,16 @@ def home():
         data.save(os.path.join(app.config['UPLOAD_PATH'],'dataset.zip'))
         with ZipFile('src/static/upload/dataset.zip', 'r') as f :
             f.extractall('src/static/upload/dir')
+        gambar = 'src/static/upload/basis.png'
+        data = os.listdir('src/static/upload/dir')
         metode = request.form['metode']
-        if metode == "no":
-            gambar = 'src/static/upload/basis.png'
-            data = os.listdir('src/static/upload/dir')
+        start = time.time()
+        if metode == "no": 
             ar_cos = texture(gambar,data)
-            gambar = '../static/upload/basis.png'
-        return render_template('home.html',gambar=gambar, ar_cos=ar_cos)
+            listOfPicture = urutGambar(ar_cos,data)
+        # else: untuk metode warna
+        end = time.time()
+        return render_template('home.html',gambar = '../static/upload/basis.png', ar=listOfPicture, len = len(listOfPicture), time = round((end-start),2))
     return render_template('home.html')
 
 if __name__ == '__main__':

@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+import shutil
 from zipfile import ZipFile
 from werkzeug.utils import secure_filename
 from CBIR_Tekstur import *
+import time
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['UPLOAD_PATH'] = 'src/static/upload'
@@ -14,6 +16,7 @@ def home():
         data = request.files['dataset']
         gambar.save(os.path.join(app.config['UPLOAD_PATH'],'basis.png'))
         data.save(os.path.join(app.config['UPLOAD_PATH'],'dataset.zip'))
+        shutil.rmtree('src/static/upload/dir')
         with ZipFile('src/static/upload/dataset.zip', 'r') as f :
             f.extractall('src/static/upload/dir')
         gambar = 'src/static/upload/basis.png'

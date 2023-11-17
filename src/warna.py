@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import math
+import os
+import math
 
 def getCmaxCminDelta(pixel):
     cmax = np.max(pixel)
@@ -18,6 +20,7 @@ def convertImagetoHSV(arrayNormal):
 
     
     return array_hsv
+
 
 def divide_image_into_blocks(image, block_size):
     height, width, _ = image.shape
@@ -39,16 +42,7 @@ def rgb_to_hsv(pixel):
     g = pixel[1]
     b = pixel[2]
 
-    #print("ini r", pixel[0])
-    #print("ini g", pixel[1])
-    #print("ini b", pixel[2])
-
-    
-
     cmax, cmin, delta = getCmaxCminDelta(pixel)
-
-
-    #print(cmax, cmin, delta)
 
     if delta == 0:
         h = 0
@@ -69,14 +63,9 @@ def rgb_to_hsv(pixel):
     return [h, s, v]
         
 
-
-    #print(h, s, v)
-
 def hsvToVector(blokhsv):
     tinggi, lebar, _ = blokhsv.shape
-    sumH = 0
-    sumS = 0
-    sumV = 0
+
     array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     for i in range(tinggi):
         for j in range(lebar):
@@ -84,81 +73,39 @@ def hsvToVector(blokhsv):
             s = blokhsv[i][j][1]
             v = blokhsv[i][j][2] 
             if h >= 316 and h <= 360:
-                H = 0
-                sumH += H
                 array[0] += 1
             elif h >= 1 and h <= 25:
-                H = 1
                 array[1] += 1
             elif h >= 26 and h <= 40:
-                H = 2
                 array[2] += 1
             elif h >= 41 and h <= 120:
-                H = 3
                 array[3] += 1
-            elif h >= 121 and h <= 190:  
-                H = 4  
+            elif h >= 121 and h <= 190: 
                 array[4] += 1
             elif h >= 191 and h <= 270:  
-                H = 5
-                sumH += H
                 array[5] += 1
             elif h >= 271 and h <= 295:  
-                H = 6 
-                sumH += H
                 array[6] += 1
             elif h >= 296 and h <= 315:
-                H = 7
-                sumH += H
-            #print("ini H",H)
                 array[7] += 1
             
- 
-
             if s >= 0 and s < 0.2:
-                S = 0
-                sumS += S
                 array[8] += 1
             elif s >= 0.2 and s < 0.7:
-                S = 1
-                sumS += S
                 array[9] += 1
             elif s >= 0.7 and s <= 1:
-                S = 2
-                sumS += S
                 array[10] += 1
 
             if v >= 0 and v < 0.2:
-                V = 0
-                sumV += V
                 array[11] += 1
             elif v >= 0.2 and v < 0.7:
-                V = 1
-                sumV += V
                 array[12] += 1
             elif v >= 0.7 and v <= 1:
-                V = 2
-                sumV += V
                 array[13] += 1
-            
-
-    arr = [sumH/(tinggi*lebar),sumS/(tinggi*lebar), sumV/(tinggi*lebar)] 
+        
     return array
 
 
-def hsvToVector2(blokhsv):
-    tinggi, lebar, _ = blokhsv.shape
-    banyak = tinggi * lebar
-    sumH = 0
-    sumS = 0
-    sumV = 0
-    for i in range(tinggi):
-        for j in range(lebar):
-            sumH += blokhsv[i][j][0]
-            sumS += blokhsv[i][j][1]
-            sumV += blokhsv[i][j][2]
-    arr =[sumH/banyak, sumS/banyak, sumV/banyak]
-    return arr
 def cosineSimilarity(vektor1,vektor2):
     def dot_product(vec1, vec2):
         return sum(x * y for x, y in zip(vec1, vec2))
@@ -177,6 +124,15 @@ def cosineSimilarity(vektor1,vektor2):
     return similarity
 
 
+
+def normalisasiGambar(arrayRGBGambar1, arrayRGBGambar2):
+    arrayRGB1Normal = arrayRGBGambar1 / 255.0
+    arrayRGB2Normal = arrayRGBGambar2 / 255.0
+
+    return arrayRGB1Normal, arrayRGB2Normal
+    
+
+#ini kalau inputnya langsung rgb gambar
 def CosineSimilarityKeseluruhan(rgbgambar1,rgbgambar2):
     normal1, normal2 = normalisasiGambar(rgbgambar1, rgbgambar2)
 
@@ -205,33 +161,68 @@ def CosineSimilarityKeseluruhan(rgbgambar1,rgbgambar2):
     return sum/len
 
 
+def storeQueryVector(Query):
+    arrayQueryBGR = cv2.imread(Query)
+    arrayQueryRGB = cv2.cvtColor(np.array(arrayQueryBGR), cv2.COLOR_BGR2RGB)
+    arrayQueryNormal = arrayQueryRGB / 255.0
+    arrayQueryHSV = convertImagetoHSV(arrayQueryNormal)
+    arrayQueryBlock = divide_image_into_blocks(arrayQueryHSV, 4)
+    arrayvectorQuery = []
+    for i in range(16):
+        vectorQueryPerBlock = hsvToVector(arrayQueryBlock[i])
+        arrayvectorQuery.append(vectorQueryPerBlock)
 
-def normalisasiGambar(arrayRGBGambar1, arrayRGBGambar2):
-    arrayRGB1Normal = arrayRGBGambar1 / 255.0
-    arrayRGB2Normal = arrayRGBGambar2 / 255.0
+    return arrayvectorQuery
 
-    return arrayRGB1Normal, arrayRGB2Normal
-    
 
+def cosineSimilarityForArrayVector(arrayVector1,arrayVector2):
+    sum = 0
+    for i in range(16):
+        sum += cosineSimilarity(arrayVector1[i], arrayVector2[i])
+
+    return sum / 16
+
+
+def gambar(query, folder):
+    vectorQuery = storeQueryVector(query)
+    arrayOfArrayVectorDataset = []
+    for file in folder:
+        file = 'src/static/upload/dir' + file
+        vectorForEveryImage = storeQueryVector(file)
+        arrayOfArrayVectorDataset.append(vectorForEveryImage)
+
+
+    arrayCosineSimilarity = []
+    for i in arrayOfArrayVectorDataset:
+        x = cosineSimilarityForArrayVector(vectorQuery, i)
+        arrayCosineSimilarity.append(x)
+
+    return arrayOfArrayVectorDataset
+
+        
 
 # Fungsi Utama
+#gambar1 = storeQueryVector("blue.jpg")
+#gambar2 = storeQueryVector("yellow.jpg")
+
+#print(cosineSimilarityForArrayVector(gambar1, gambar2))
+
+#gambar1 = cv2.imread("blue.jpg")
+#gambar2 = cv2.imread("yellow.jpg")
+
+#arrayRGBGambar1 = cv2.cvtColor(np.array(gambar1), cv2.COLOR_BGR2RGB)
 
 
-gambar1 = cv2.imread("blue.jpg")
-gambar2 = cv2.imread("yellow.jpg")
-
-arrayRGBGambar1 = cv2.cvtColor(np.array(gambar1), cv2.COLOR_BGR2RGB)
-
-
-arrayRGBGambar2 = cv2.cvtColor(np.array(gambar2), cv2.COLOR_BGR2RGB)
+#arrayRGBGambar2 = cv2.cvtColor(np.array(gambar2), cv2.COLOR_BGR2RGB)
 #array_rgb_float = array_rgb.astype(np.float32)
 
 #arrayRGB1Normal = arrayRGBGambar1 / 255.0
 #arrayRGB2Normal = arrayRGBGambar2 / 255.0
 
-hasil = CosineSimilarityKeseluruhan(arrayRGBGambar1, arrayRGBGambar2)
+#hasil = CosineSimilarityKeseluruhan(arrayRGBGambar1, arrayRGBGambar2)
 
-print(hasil)
+
+#print(hasil)
 
 #print(arrayRGB1Normal)
 #print("ini yang kedua --------------")

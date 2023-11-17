@@ -15,12 +15,12 @@
             </h1>
         </header>
         <main>
-            <form method="POST" action="" enctype="multipart/form-data">
+            <form method="POST" action="" enctype="multipart/form-data" id="masukkan">
                 <label for="gambar">Pilih Gambar:<br></label>
-                <input type="file" accept="image/*" name="gambar" required>
+                <input type="file" accept="image/*" name="gambar" class="masukkanGambar" required>
                 <br>
                 <label for="dataset">Pilih Dataset:<br></label>
-                <input type="file" accept=".zip, .rar, .7zip/*" name="dataset" required>
+                <input type="file" accept=".zip, .rar, .7zip/*" class="masukkanGambar" name="dataset" required>
 
                 <section id="toggleButton">
                     <input type="radio" name="metode" id="Color" value="yes" checked="checked">
@@ -40,16 +40,17 @@
                 {% endif %}
             </div>
             <hr>
-            {% if len %}
-                <p id="timeCount">{{len}} gambar dalam {{time}} detik</p>
-            {% endif %}
-            <div id="result">
+            <div>
                 <h3>Result</h3>
+                {% if time %}
+                    <p id="timeCount">{{len}} gambar dalam {{time}} detik</p>
+                {% endif %}
                 {% if ar %}
                     {% for el in ar %}
+                    <figure>
                         <img src="../static/upload/dir/{{el[1]}}">
                         <figcaption>{{ el[0] }}%</figcaption>
-                        <br>
+                    </figure>
                     {% endfor %}
                 {% endif %}
             </div>

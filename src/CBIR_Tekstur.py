@@ -5,74 +5,136 @@ import os
 import time
 from zipfile import ZipFile
 
-def nContrast(mCO) :
-    contrast = 0
-    for i in range(0,256):
-        for j in range(0,256):
-            contrast = contrast + mCO[i][j]*(m.pow((i-j),2))
-    # print(contrast)
+def nContrast(mCo):
+    i, j = np.indices(mCo.shape)
+    contrast = np.sum(mCo * (i - j)**2)
     return contrast
 
-def nHomogeneity(mCo) :
-    homogeneity = 0
-    for i in range(0,256):
-        for j in range(0,256):
-            homogeneity = homogeneity + mCo[i][j]/(1 + (m.pow((i-j),2)))
-    # print(homogeneity)
+def nHomogeneity(mCo):
+    i, j = np.indices(mCo.shape)
+    homogeneity = np.sum(mCo / (1 + (i - j)**2))
     return homogeneity
 
-def nEntropy(mCo) :
-    entropy = 0
-    for i in range(0,256):
-        for j in range(0,256):
-            if mCo[i][j] != 0 :
-                entropy = entropy - mCo[i][j]*(m.log10(mCo[i][j]))
-    # print(entropy)
+def nEntropy(mCo):
+    non_zero_elements = mCo[mCo != 0]
+    entropy = -np.sum(non_zero_elements * np.log10(non_zero_elements))
     return entropy
 
-def matriksCoOccurance(mGrayImage) :    
-    mCo = np.array([[0.0 for j in range(256)] for i in range(256)])
-    for i in range(len(mGrayImage)):
-        for j in range(len(mGrayImage[0])-1):
-            p = mGrayImage[i][j]
-            q = mGrayImage[i][j+1]
-            mCo[p][q] = mCo[p][q] + 1
-    mCoT = mCo.transpose()
-    matriksCO = mCo + mCoT
-    sigma = 2*len(mGrayImage)*(len(mGrayImage[0])-1)
-    matriksCO = matriksCO/sigma
-    return matriksCO
-
-def nDissimilarity(mCo) :
-    dissimilarity = 0 
-    for i in range(0,256) :
-        for j in range(0,256) :
-            if i >= j :
-                dissimilarity = dissimilarity + mCo[i][j]*(i-j) 
-            else :
-                dissimilarity = dissimilarity + mCo[i][j]*(j-i)
-    #print(dissimilarity)
+def nDissimilarity(mCo):
+    i, j = np.indices(mCo.shape)
+    dissimilarity = np.sum(mCo * np.abs(i - j))
     return dissimilarity
 
-def nASM(mCo) :
-    ASM = 0 
-    for i in range(0,256) :
-        for j in range(0,256) :
-            ASM = ASM + m.pow(mCo[i][j],2)
-    #print(ASM)
-    return ASM
+def nASM(mCo):
+    asm = np.sum(mCo**2)
+    return asm
 
-def nEnergy(mCo) :
+def nEnergy(mCo):
     energy = m.sqrt(nASM(mCo))
-    #print(energy)
     return energy
 
-def RGBtoGrayscale(gambar) :
-    mGray = np.array([[0 for j in range(len(gambar[0]))] for i in range(len(gambar))])
-    for i in range(len(gambar)) :
-        for j in range(len(gambar[0])) :
-            mGray[i][j] = 0.299*gambar[i][j][2] + 0.587*gambar[i][j][1] + 0.114*gambar[i][j][0]
+
+# def nContrast(mCO) :
+#     contrast = 0
+#     for i in range(0,256):
+#         for j in range(0,256):
+#             contrast = contrast + mCO[i][j]*(m.pow((i-j),2))
+#     # print(contrast)
+#     return contrast
+
+# def nHomogeneity(mCo) :
+#     homogeneity = 0
+#     for i in range(0,256):
+#         for j in range(0,256):
+#             homogeneity = homogeneity + mCo[i][j]/(1 + (m.pow((i-j),2)))
+#     # print(homogeneity)
+#     return homogeneity
+
+# def nEntropy(mCo) :
+#     entropy = 0
+#     for i in range(0,256):
+#         for j in range(0,256):
+#             if mCo[i][j] != 0 :
+#                 entropy = entropy - mCo[i][j]*(m.log10(mCo[i][j]))
+#     # print(entropy)
+#     return entropy
+
+# def nDissimilarity(mCo) :
+#     dissimilarity = 0 
+#     for i in range(0,256) :
+#         for j in range(0,256) :
+#             if i >= j :
+#                 dissimilarity = dissimilarity + mCo[i][j]*(i-j) 
+#             else :
+#                 dissimilarity = dissimilarity + mCo[i][j]*(j-i)
+#     #print(dissimilarity)
+#     return dissimilarity
+
+# def nASM(mCo) :
+#     ASM = 0 
+#     for i in range(0,256) :
+#         for j in range(0,256) :
+#             ASM = ASM + m.pow(mCo[i][j],2)
+#     #print(ASM)
+#     return ASM
+
+# def nEnergy(mCo) :
+#     energy = m.sqrt(nASM(mCo))
+#     #print(energy)
+#     return energy
+
+import numpy as np
+
+def matriksCoOccurance(mGrayImage):
+    mCo = np.zeros((256, 256), dtype=float)
+
+    for i in range(len(mGrayImage)):
+        p = mGrayImage[i, :-1]
+        q = mGrayImage[i, 1:]
+        np.add.at(mCo, (p, q), 1)
+
+    matriksCO = mCo + mCo.transpose()
+    sigma = 2 * len(mGrayImage) * (len(mGrayImage[0]) - 1)
+    matriksCO /= sigma
+
+    return matriksCO
+
+# def matriksCoOccurance(mGrayImage) :    
+#     mCo = np.array([[0.0 for j in range(256)] for i in range(256)])
+#     for i in range(len(mGrayImage)):
+#         for j in range(len(mGrayImage[0])-1):
+#             p = mGrayImage[i][j]
+#             q = mGrayImage[i][j+1]
+#             mCo[p][q] = mCo[p][q] + 1
+#     mCoT = mCo.transpose()
+#     matriksCO = mCo + mCoT
+#     sigma = 2*len(mGrayImage)*(len(mGrayImage[0])-1)
+#     matriksCO = matriksCO/sigma
+#     return matriksCO
+
+# def RGBtoGrayscale(gambar) :
+#     start = time.time()
+#     mGray = np.array([[0 for j in range(len(gambar[0]))] for i in range(len(gambar))])
+#     for i in range(len(gambar)) :
+#         for j in range(len(gambar[0])) :
+#             mGray[i][j] = 0.299*gambar[i][j][2] + 0.587*gambar[i][j][1] + 0.114*gambar[i][j][0]
+#     end = time.time()
+#     print(f"Iteration: {1}\tTime taken: {(end-start)*10**3:.03f}ms")
+#     return mGray
+
+def RGBtoGrayscale(gambar):
+    start = time.time()
+    # Extract the RGB channels
+    red_channel = gambar[:, :, 2]
+    green_channel = gambar[:, :, 1]
+    blue_channel = gambar[:, :, 0]
+    # Convert RGB to grayscale using the formula: 0.299*R + 0.587*G + 0.114*B
+    mGray_float = 0.299 * red_channel + 0.587 * green_channel + 0.114 * blue_channel + 0.5
+    mGray = mGray_float.astype(np.uint8)
+    end = time.time()
+    print(f"Iteration: {1}\tTime taken: {(end-start)*10**3:.03f}ms")
     return mGray
+
 
 def cosSimilarity(vektorA, vektorB) :
     dotProduct = 0
@@ -122,14 +184,15 @@ def bandingTekstur(mCO1, mCO2) :
     nCossine = cosSimilarity(vektorA,vektorB)
     return nCossine
 
-# image1 = cv2.imread("src/kucing2.jpg")
-# image2 = cv2.imread("src/siklus.jpg")
+# start = time.time()
+# image1 = cv2.imread("src/static/upload/basis.png")
+# image2 = cv2.imread("src/static/upload/basis.png")
 # #image1 = RGBtoGrayscale(image1) 601,2/907,8*401 18178,7
-# #image2 = RGBtoGrayscale(image2)
+# image2 = RGBtoGrayscale(image2)
 # print(image1)
 # print(image2)
 # image1 = cv2.cvtColor(np.array(image1), cv2.COLOR_BGR2GRAY)
-# image2 = cv2.cvtColor(np.array(image2), cv2.COLOR_BGR2GRAY)
+# # image2 = cv2.cvtColor(np.array(image2), cv2.COLOR_BGR2GRAY)
 # mCO1 = matriksCoOccurance(image1)
 # print(mCO1)
 # mCO2 = matriksCoOccurance(image2)
@@ -137,18 +200,10 @@ def bandingTekstur(mCO1, mCO2) :
 # print(image1)
 # print(image2)
 # hasil = bandingTekstur(mCO1,mCO2)
-# # print(hasil)
-# ar = os.listdir('dong')
-# arc = texture("hitam.jpg", ar)
-# a = [(int(3),"a"),
-#     (int(5),"d"),
-#     (int(1),"c")]
-# a.sort(reverse=True)
-# print(a)
-# print(a[0][1])
-# print(a[1][1])
-# print(a[2][1])
-# print(round(a[0][0]/3*100,2))
+# print(hasil)
+# end = time.time()
+# print(f"Iteration: {1}\tTime taken: {(end-start)*10**3:.03f}ms")
+
 
 #contoh cara pakenya di bawah
 def urutGambar(ar_cos,ar_file) :
@@ -159,6 +214,13 @@ def urutGambar(ar_cos,ar_file) :
     # print(gambarUrut)
     return gambarUrut
 
+# image = cv2.imread('src/static/upload/basis.png')
+# image0 = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# image1 = RGBtoGrayscale(image)
+# image2 = RGBtoGrayscaleGPT(image)
+# print(image0)
+# print(image1)
+# print(image2)
 # folder = os.listdir("src/static/upload/dir")
 # ar_file = []
 # for file in folder :

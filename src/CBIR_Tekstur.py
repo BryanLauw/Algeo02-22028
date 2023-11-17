@@ -138,11 +138,11 @@ def RGBtoGrayscale(gambar):
 
 def cosSimilarity(vektorA, vektorB) :
     dotProduct = 0
-    for i in range(3) :
+    for i in range(6) :
         dotProduct = dotProduct + vektorA[i]*vektorB[i] 
     jarakA = 0
     jarakB = 0
-    for i in range(3) :
+    for i in range(6) :
         jarakA = jarakA + m.pow(vektorA[i],2)
         jarakB = jarakB + m.pow(vektorB[i],2)
     jarakA = jarakA*jarakB  
@@ -179,33 +179,38 @@ def texture(queryImg, folder):
     return array_cos
 
 def bandingTekstur(mCO1, mCO2) :
-    vektorA = [nContrast(mCO1), nHomogeneity(mCO1), nEntropy(mCO1)]
-    vektorB = [nContrast(mCO2), nHomogeneity(mCO2), nEntropy(mCO2)]
+    vektorA = [nContrast(mCO1), nHomogeneity(mCO1), nEntropy(mCO1),nDissimilarity(mCO1), nASM(mCO1), nEnergy(mCO1)]
+    vektorB = [nContrast(mCO2), nHomogeneity(mCO2), nEntropy(mCO2),nDissimilarity(mCO2), nASM(mCO2), nEnergy(mCO2)]
     nCossine = cosSimilarity(vektorA,vektorB)
     return nCossine
 
-# start = time.time()
-# image1 = cv2.imread("src/static/upload/basis.png")
-# image2 = cv2.imread("src/static/upload/basis.png")
-# #image1 = RGBtoGrayscale(image1) 601,2/907,8*401 18178,7
-# image2 = RGBtoGrayscale(image2)
-# print(image1)
-# print(image2)
-# image1 = cv2.cvtColor(np.array(image1), cv2.COLOR_BGR2GRAY)
-# # image2 = cv2.cvtColor(np.array(image2), cv2.COLOR_BGR2GRAY)
-# mCO1 = matriksCoOccurance(image1)
-# print(mCO1)
-# mCO2 = matriksCoOccurance(image2)
-# print(mCO2)
-# print(image1)
-# print(image2)
-# hasil = bandingTekstur(mCO1,mCO2)
-# print(hasil)
-# end = time.time()
-# print(f"Iteration: {1}\tTime taken: {(end-start)*10**3:.03f}ms")
+start = time.time()
+image1 = cv2.imread("src/static/upload/basis.png")
+image2 = cv2.imread("src/static/upload/basis.png")
+#image1 = RGBtoGrayscale(image1) 601,2/907,8*401 18178,7
+image2 = RGBtoGrayscale(image2)
+print(image1)
+print(image2)
+image1 = cv2.cvtColor(np.array(image1), cv2.COLOR_BGR2GRAY)
+# image2 = cv2.cvtColor(np.array(image2), cv2.COLOR_BGR2GRAY)
+mCO1 = matriksCoOccurance(image1)
+print(mCO1)
+mCO2 = matriksCoOccurance(image2)
+print(mCO2)
+print(image1)
+print(image2)
+hasil = bandingTekstur(mCO1,mCO2)
+print(hasil)
+end = time.time()
+print(f"Iteration: {1}\tTime taken: {(end-start)*10**3:.03f}ms")
 
 
 #contoh cara pakenya di bawah
+def urutGambar(ar_cos, ar_file):
+    gambarUrut = [(cos, file) for cos, file in zip(ar_cos, ar_file) if cos >= 60]
+    gambarUrut.sort(reverse=True)
+    return gambarUrut
+
 def urutGambar(ar_cos,ar_file) :
     a = [(ar_cos[i],ar_file[i]) for i in range(len(ar_cos))]
     # print(a)

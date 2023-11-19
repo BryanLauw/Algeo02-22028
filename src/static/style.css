@@ -222,3 +222,12 @@ form {
 #petunjuk li {
     margin: 15px;
 }
+
+#fotoKelompok {
+    text-align: center;
+}
+
+#fotoKelompok img {
+    margin-top: 20px;
+    width: 300px;
+}

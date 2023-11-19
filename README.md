@@ -20,69 +20,55 @@ Dalam era digital, jumlah gambar yang dihasilkan dan disimpan semakin meningkat 
 </ul>
 
 <h2>Struktur</h2>
-.
-│   README.md
-│
-├───doc                             # Laporan
-│   ├───Algeo02-21026.pdf
-├───src                             # Source code
-│   ├───Algoritma                   # Algoritma
-│   │       faceAlignment.py
-│   │       function.py
-│   │       getEigenFace.py
-│   │       getFolder.py
-│   │       gui.py
-│   │       main.py
-│   │
-│   ├───Assets                        # Assets
-│   │       cam.png
-│   │       detect.png
-│   │       dilanbg1.png
-│   │       folder1.png
-│   │       folder2.png
-│   │       icon.ico
-│   │       img1.png
-│   │       img2.png
-│   │       notfound.png
-│   │       presentase.png
-│   │       result1.png
-│   │       result2.png
-│   │       train.png
-│   │       typex.png
-│   │
-│   ├───Dataset                        # Dataset   
-│   │       Copa.jpg
-│   │       Copa1.jpg
-│   │       Copa2.jpg
-│   │       Copa3.jpg
-│   │       Copa4.jpg
-│   │       Malik.jpg
-│   │       Malik1.jpg
-│   │       Malik2.jpg
-│   │       Malik3.jpg
-│   │       Malik4.jpg
-│   │
-│   ├───Tampilan                      # Tampilan
-│   │       Tampilan.png
-│   │       Tampilan1.png
-│   │       
-└───test                              # Testing cases
-            Copa1.jpg
-            Copa2.jpg
-            Copa3.jpg
-            Copa4.jpg
-            Copa5.jpg
-            Jauza1.jpg
-            Jauza2.jpg
-            Jauza3.jpg
-            Jauza4.jpg
-            Jauza5.jpg
-            Malik.jpg
-            Malik1.jpg
-            Malik2.jpg
-            Malik3.jpg
-            Malik4.jpg
-
+.<br>
+│   README.md<br>
+│<br>
+├───doc                             # Laporan<br>
+│   ├───Algeo02-22028.pdf<br>
+├───src                             # Source code<br>
+│   │ app.py<br>
+│   │ tekstur.py<br>
+│   │ warna.py<br>
+│   ├───templates<br>               # HTML
+│   │       about.html<br>
+│   │       concept.html<br>
+│   │       home.html<br>
+│   │       howtouse.html<br>
+│   ├───static<br>                  # CSS and other picture
+│   │       style.css<br>
+│   ├────────upload<br>
+│   │<br>
+│   ├───img                         # image and screenshot<br>
+│   │       31539.jpg<br>
+│   │       UjiCoba1-HasilTekstur(1).png<br>
+│   │       UjiCoba1-HasilTekstur(2).png<br>
+│   │       UjiCoba1-HasilTekstur(3).png<br>
+│   │       UjiCoba1-HasilWarna.png<br>
+│   │       UjiCoba1-Query.png<br>
+│   │       UjiCoba2-HasilTekstur.png<br>
+│   │       UjiCoba2-HasilWarna.png<br>
+│   │       UjiCoba1-Query.png<br>
+│   │       UjiCoba3-HasilTekstur(1).png<br>
+│   │       UjiCoba3-HasilTekstur(2).png<br>
+│   │       UjiCoba3-HasilTekstur(3).png<br>
+│   │       UjiCoba3-HasilTekstur(4).png<br>
+│   │       UjiCoba3-HasilTekstur(5).png<br>
+│   │       UjiCoba3-HasilTekstur(6).png<br>
+│   │       UjiCoba3-HasilWarna(1).png<br>
+│   │       UjiCoba3-HasilWarna(2).png<br>
+│   │       UjiCoba3-HasilWarna(3).png<br>
+│   │       UjiCoba3-HasilWarna(4).png<br>
+│   │       UjiCoba3-Query.png<br>
+│   │       UjiCobaContoh-Hasil.png<br>
+│   │       UjiCobaContoh-Query.png<br>
+│   │<br>
+└───test                              # Testing cases<br>
+        50gambaragakrandom<br>
+        seratusGambar<br>
+        31536.jpg<br>
+        blue.jpg<br>
+        warnaterang.jpg<br>
+        
 <h2>Cara menjalankan program</h2>
 <ol>
     <li>Install seluruh libary yang diperlukan</li>

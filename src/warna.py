@@ -1,9 +1,6 @@
 import cv2
 import numpy as np
 import math
-import os
-import math
-import time
 
 def getCmaxCminDelta(pixel):
     cmax = np.max(pixel)
@@ -22,7 +19,6 @@ def divide_image_into_blocks(image, block_size):
     return blocks
 
 def imageToVector(arrayNormal):
-    start = time.time()
     array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     for i in range(arrayNormal.shape[0]):
         for j in range(arrayNormal.shape[1]):
@@ -57,8 +53,6 @@ def imageToVector(arrayNormal):
                 array[12] += 1
             elif v >= 0.7 and v <= 1:
                 array[13] += 1
-    end = time.time()
-    print(f"Time taken: {(end-start)*10**3:.03f}ms")
     return array
 
 
@@ -137,28 +131,26 @@ def cosineSimilarityForArrayVector(arrayVector1,arrayVector2):
 # print(f"Time taken: {(end-start)*10**3:.03f}ms")
 
 
-def gambar(query, folder):
+def color(query, folder):
     vectorQuery = storeQueryVector(query)
     arrayOfArrayVectorDataset = []
     for file in folder:
-        file = 'src/static/upload/dir' + file
+        file = 'src/static/upload/dir/' + file
         vectorForEveryImage = storeQueryVector(file)
         arrayOfArrayVectorDataset.append(vectorForEveryImage)
 
 
     arrayCosineSimilarity = []
     for i in arrayOfArrayVectorDataset:
-        x = cosineSimilarityForArrayVector(vectorQuery, i)
+        x = round(cosineSimilarityForArrayVector(vectorQuery, i)*100,2)
         arrayCosineSimilarity.append(x)
 
     return arrayCosineSimilarity
 
 def urutGambarWarna(ar_cos,ar_file) :
     a = [(ar_cos[i],ar_file[i]) for i in range(len(ar_cos))]
-    # print(a)
     gambarUrut = list(filter(lambda x: x[0] >= 60, a))
     gambarUrut.sort(reverse=True)
-    # print(gambarUrut)
     return gambarUrut
 
 

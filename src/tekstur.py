@@ -97,8 +97,6 @@ def bandingTekstur(mCO1, mCO2) :
 
 def urutGambar(ar_cos,ar_file) :
     a = [(ar_cos[i],ar_file[i]) for i in range(len(ar_cos))]
-    # print(a)
     gambarUrut = list(filter(lambda x: x[0] >= 60, a))
     gambarUrut.sort(reverse=True)
-    # print(gambarUrut)
     return gambarUrut

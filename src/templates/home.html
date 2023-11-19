@@ -13,6 +13,23 @@
             <h1>
                 Reverse Image Search
             </h1>
+
+            <nav>
+				<ul>
+					<li>
+						<a href="{{ url_for('home') }}">Home</a>
+					</li>
+					<li>
+						<a href="{{ url_for('about') }}">About us</a>
+					</li>
+					<li>
+						<a href="{{ url_for('concept') }}">Brief concept</a>
+					</li>
+                    <li>
+						<a href="{{ url_for('how') }}">How to use</a>
+					</li>
+				</ul>
+			</nav>
         </header>
         <main>
             <form method="POST" action="" enctype="multipart/form-data" id="masukkan">
@@ -45,13 +62,61 @@
                 {% if time %}
                     <p id="timeCount">{{len}} gambar dalam {{time}} detik</p>
                 {% endif %}
-                {% if ar %}
-                    {% for el in ar %}
+                {% if len %}
+                <div id="pagination-container"></div>
+
+                <div id="image-container">
+                    {% for el in data %}
                     <figure>
-                        <img src="../static/upload/dir/{{el[1]}}">
-                        <figcaption>{{ el[0] }}%</figcaption>
+                        <img src="../static/upload/dir/{{el.picture}}">
+                        <figcaption>{{ el.percentage }}%</figcaption>
                     </figure>
                     {% endfor %}
+                </div>
+
+                <script>
+                    function showPage(page) {
+                        const items = document.querySelectorAll('#image-container figure');
+                        const itemsPerPage = 18;
+                
+                        items.forEach((item, index) => {
+                            if (index >= (page - 1) * itemsPerPage && index < page * itemsPerPage) {
+                                item.style.display = 'block';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                
+                        const links = document.querySelectorAll('#pagination-container a');
+                        links.forEach(link => link.classList.remove('active'));
+                
+                        const activeLink = document.getElementById(`page-${page}`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                
+                    showPage(1);
+                
+                    const totalPages = Math.ceil({{ len }} / 18);
+                    const paginationContainer = document.getElementById('pagination-container');
+                
+                    for (let i = 1; i <= totalPages; i++) {
+                        const link = document.createElement('a');
+                        link.href = '#';
+                        link.id = `page-${i}`;
+                        link.textContent = i;
+                        link.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            showPage(i);
+                        });
+                
+                        paginationContainer.appendChild(link);
+                    }
+
+                    page1 = document.getElementById('page-1');
+                    page1.classList.add('active');
+                </script>                
                 {% endif %}
             </div>
         </main>

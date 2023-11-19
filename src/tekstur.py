@@ -46,11 +46,9 @@ def matriksCoOccurance(mGrayImage):
 
 
 def RGBtoGrayscale(gambar):
-    # Extract the RGB channels
     red_channel = gambar[:, :, 2]
     green_channel = gambar[:, :, 1]
     blue_channel = gambar[:, :, 0]
-    # Convert RGB to grayscale using the formula: 0.299*R + 0.587*G + 0.114*B
     mGray_float = 0.299 * red_channel + 0.587 * green_channel + 0.114 * blue_channel + 0.5
     mGray = mGray_float.astype(np.uint8)
     return mGray
@@ -88,12 +86,6 @@ def texture(queryImg, folder):
         x = cosSimilarity(vektorq,i)
         array_cos.append(x)
     return array_cos
-
-def bandingTekstur(mCO1, mCO2) :
-    vektorA = [nContrast(mCO1), nHomogeneity(mCO1), nEntropy(mCO1),nDissimilarity(mCO1), nASM(mCO1), nEnergy(mCO1)]
-    vektorB = [nContrast(mCO2), nHomogeneity(mCO2), nEntropy(mCO2),nDissimilarity(mCO2), nASM(mCO2), nEnergy(mCO2)]
-    nCossine = cosSimilarity(vektorA,vektorB)
-    return nCossine
 
 def urutGambar(ar_cos,ar_file) :
     a = [(ar_cos[i],ar_file[i]) for i in range(len(ar_cos))]
